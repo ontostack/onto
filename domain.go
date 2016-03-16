@@ -42,12 +42,29 @@ type DVar struct {
 	Type       VarType
 	Whole      *DomainClass
 	Other      *DomainClass
+	Comment    string
 	Name       string
 	Column     string
 	Default    string
 	Range      IntRange
 	IsAuto     bool
 	IsEditable bool
+}
+
+func (v DVar) GoType() string {
+	switch {
+	case v.Whole != nil || v.Other != nil:
+		return "int"
+	case v.Type == Int:
+		return "int"
+	case v.Type == String:
+		return "string"
+	case v.Type == Bool:
+		return "bool"
+	case v.Type == Float:
+		return "float64"
+	}
+	return ""
 }
 
 func (v DVar) IsDefault() (bool, string) {
@@ -65,7 +82,9 @@ func (v DVar) IsDefault() (bool, string) {
 }
 
 type DomainClass struct {
+	Name      string
 	Table     string
+	Comment   string
 	Arguments []DVar
 	Editables []DVar
 	External  []DVar
