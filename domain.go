@@ -1,5 +1,9 @@
 package onto
 
+import (
+	"strings"
+)
+
 type VarType int
 
 const (
@@ -65,6 +69,13 @@ func (v DVar) GoType() string {
 		return "float64"
 	}
 	return ""
+}
+
+func (v DVar) UpName() string {
+	if len(v.Name) < 1 {
+		return ""
+	}
+	return strings.ToUpper(v.Name[:1]) + v.Name[1:]
 }
 
 func (v DVar) IsDefault() (bool, string) {
@@ -141,4 +152,20 @@ func (d *DomainClass) AllEditables() []DVar {
 		joinDVarsCond(func(v DVar) bool {
 			return v.IsEditable
 		}, d.Arguments, d.Autos))
+}
+
+func (d *DomainClass) Range(over func() []DVar, do func(v DVar, cmt, name, tp string) bool) bool {
+	for i, v := range over() {
+		t := v.GoType()
+		cmt := "//" + v.Comment
+		if i == 0 {
+			cmt = "\n" + cmt
+		}
+		if len(t) > 0 {
+			if !do(v, cmt, v.Name, t) {
+				return false
+			}
+		}
+	}
+	return true
 }
