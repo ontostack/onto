@@ -122,6 +122,10 @@ func joinDVarsCond(p func(DVar) bool, arrs ...[]DVar) []DVar {
 	return retv
 }
 
+func (d *DomainClass) Args() []DVar {
+	return d.Arguments
+}
+
 func (d *DomainClass) AllVars() []DVar {
 	return joinDVars(d.Arguments, d.Editables, d.External, d.Autos)
 }
