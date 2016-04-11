@@ -224,6 +224,20 @@ func (d *DomainClass) AllEditables() []DVar {
 	return d.allEditables
 }
 
+func (d *DomainClass) allUpdatables_() []DVar {
+	return joinDVars(d.Updatables,
+		joinDVarsCond(func(v DVar) bool {
+			return v.IsUpdatable
+		}, d.Arguments, d.Autos))
+}
+
+func (d *DomainClass) AllUpdatables() []DVar {
+	if d.allUpdatables == nil {
+		d.allUpdatables = d.allUpdatables_()
+	}
+	return d.allUpdatables
+}
+
 func (d *DomainClass) IsEditable() bool {
 	return len(d.AllEditables()) > 0
 }
