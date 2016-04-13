@@ -10,6 +10,7 @@ const (
 	Unknown VarType = iota
 	Int
 	String
+	Date
 	Bool
 	Float
 )
@@ -63,6 +64,8 @@ func (v DVar) GoType() string {
 	case v.Type == Int:
 		return "int"
 	case v.Type == String:
+		return "string"
+	case v.Type == Date:
 		return "string"
 	case v.Type == Bool:
 		return "bool"
