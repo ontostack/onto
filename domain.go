@@ -55,6 +55,7 @@ type DVar struct {
 	IsAuto      bool
 	IsEditable  bool
 	IsUpdatable bool
+	InitEdited  OpSide
 }
 
 func (v DVar) GoType() string {
@@ -120,6 +121,15 @@ func joinDVarsCond(p func(DVar) bool, arrs ...[]DVar) []DVar {
 	return retv
 }
 
+type OpSide int
+
+const (
+	SideNone OpSide = iota
+	SideServer
+	SideClient
+	SideBoth
+)
+
 type DomainClass struct {
 	Name       string
 	Table      string
@@ -129,6 +139,14 @@ type DomainClass struct {
 	Updatables []DVar
 	External   []DVar
 	Autos      []DVar
+
+	InitNew       OpSide
+	InitEdited    OpSide
+	InitUpdated   OpSide
+	InitOnClient  bool
+	InitOnServer  bool
+	InitBeforeDel bool
+	InitAfterDel  bool
 
 	allVars       []DVar
 	defaultArgs   []DVar
