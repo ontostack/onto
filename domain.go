@@ -124,11 +124,19 @@ func joinDVarsCond(p func(DVar) bool, arrs ...[]DVar) []DVar {
 type OpSide int
 
 const (
-	SideNone OpSide = iota
-	SideServer
-	SideClient
-	SideBoth
+	None OpSide = iota
+	ServerSide
+	ClientSide
+	BothSides
 )
+
+func (s OpSide) RequiresClient() bool {
+	return s == ClientSide || s == BothSides
+}
+
+func (s OpSide) RequiresServer() bool {
+	return s == ServerSide || s == BothSides
+}
 
 type DomainClass struct {
 	Name       string
